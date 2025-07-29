@@ -11,7 +11,7 @@ import {
  * @param {*} returnFiber 父 Fiber 节点
  */
 function createFiber(vnode, returnFiber) {
-  console.log(vnode, returnFiber)
+  // console.log(vnode, returnFiber)
   const fiber = {
     // fiber 的类型
     type: vnode.type,
