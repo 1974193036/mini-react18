@@ -1,6 +1,7 @@
 // 该文件负责整个 React 的一个执行流行
 import completeWork from './ReactFiberCompleteWork'
 import beginWork from './ReactFiberBeginWork'
+import commitWorker from './ReactFiberCommitWork'
 
 // wip 的英语全称为 work in progress，表示正在进行的工作
 // 我们使用这个变量来保存当前正在进行的工作 fiber 对象
@@ -83,6 +84,7 @@ function performUnitOfWork() {
 
 function commitRoot() {
   console.log('wipRoot', wipRoot)
+  commitWorker(wipRoot)
   wipRoot = null
 }
 
