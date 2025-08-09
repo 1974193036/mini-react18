@@ -1,4 +1,5 @@
 import { updateNode } from '../shared/utils.js'
+import { reconcileChildren } from './ReactChildFiber.js'
 
 /**
  *
@@ -15,6 +16,7 @@ export function updateHostComponent(wip) {
   }
 
   // 处理子节点
+  reconcileChildren(wip, wip.props.children)
 }
 
 export function updateHostTextComponent(wip) {

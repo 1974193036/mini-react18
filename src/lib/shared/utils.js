@@ -33,6 +33,15 @@ export function isUndefined(s) {
 }
 
 /**
+ * 判断参数 arr 是否为数组
+ * @param {*} arr
+ * @returns
+ */
+export function isArray(arr) {
+  return Array.isArray(arr)
+}
+
+/**
  * 该方法主要负责更新 DOM 节点上的属性
  * @param {*} node 真实的 DOM 节点
  * @param {*} prevVal 旧值
