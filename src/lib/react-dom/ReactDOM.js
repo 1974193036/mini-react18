@@ -1,4 +1,5 @@
 import createFiber from '../reconciler/ReactFiber'
+import scheduleUpdateOnFiber from '../reconciler/ReactFiberWorkLoop'
 /**
  * 更新容器的方法
  * @param {*} element 要挂载的 vnode 树
@@ -11,7 +12,10 @@ function updateContainer(element, container) {
     type: container.nodeName.toLowerCase(),
     stateNode: container,
   })
-  console.log('fiber', fiber)
+  // console.log('fiber', fiber)
+  // 到目前为止，我们就创建了第一个 fiber 对象
+  // 但是目前仅仅只有最外层的父元素创建了对应的 fiber 对象
+  scheduleUpdateOnFiber(fiber)
 }
 
 class ReactDOMRoot {
