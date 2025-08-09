@@ -13,6 +13,8 @@ export function updateHostComponent(wip) {
     // 接下来我们需要更新节点上的属性
     updateNode(wip.stateNode, {}, wip.props)
   }
+
+  // 处理子节点
 }
 
 export function updateHostTextComponent(wip) {
