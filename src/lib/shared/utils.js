@@ -35,7 +35,7 @@ export function isUndefined(s) {
 /**
  * 判断参数 arr 是否为数组
  * @param {*} arr
- * @returns
+ * @returns boolean
  */
 export function isArray(arr) {
   return Array.isArray(arr)
