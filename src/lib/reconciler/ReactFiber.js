@@ -1,4 +1,4 @@
-import { isFn, isStr, isUndefined, Placement } from '../shared/utils'
+import { isFn, isStrOrNum, isUndefined, Placement } from '../shared/utils'
 import {
   ClassComponent,
   Fragment,
@@ -41,7 +41,7 @@ function createFiber(vnode, returnFiber) {
   // 不同的 vnode 类型，type 是有所不同的
 
   const type = vnode.type // 先存储一下 type 值，之后不用每次都去获取
-  if (isStr(type)) {
+  if (isStrOrNum(type)) {
     // 原生标签
     fiber.tag = HostComponent
   }

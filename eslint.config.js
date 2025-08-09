@@ -11,6 +11,7 @@ export default antfu(
       'perfectionist/sort-imports': 'off',
       'perfectionist/sort-exports': 'off',
       'perfectionist/sort-named-exports': 'off',
+      'react-dom/no-missing-button-type': 'off',
     },
   },
 )

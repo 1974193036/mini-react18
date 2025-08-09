@@ -4,22 +4,25 @@
 // 引入我们自己的库
 import ReactDOM from './lib/react-dom/ReactDOM'
 
-// import App from './App.jsx'
-
-// console.log('App', App)
-
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
-// root.render(<App />)
+// function FunctionComponent() {
+//   function handleClick() {
+//     console.log('点击了')
+//   }
 
-// root.render(
-//   <div id="oDiv" className="test">
-//     <ul>
-//       <li>苹果</li>
-//       <li>香蕉</li>
-//       <li>西瓜</li>
-//     </ul>
-//   </div>,
-// )
+//   return (
+//     <div class="comp">
+//       <h1>0</h1>
+//       <button onClick={handleClick}>点击</button>
+//     </div>
+//   )
+// }
 
-root.render(1111)
+root.render(
+  <div id="oDiv" className="test">
+    <p>React</p>
+    <a href="https://www.baidu.com">baidu</a>
+    {/* <FunctionComponent /> */}
+  </div>,
+)

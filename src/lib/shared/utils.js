@@ -14,8 +14,8 @@ export const Deletion = 0b0000000000000000001000 // 8
 /**
  * 判断参数 s 是否为字符串
  */
-export function isStr(s) {
-  return typeof s === 'string'
+export function isStrOrNum(s) {
+  return typeof s === 'string' || typeof s === 'number'
 }
 
 /**
