@@ -7,6 +7,8 @@ import {
   HostText,
 } from './ReactWorkTags'
 import {
+  updateClassComponent,
+  updateFunctionComponent,
   updateHostComponent,
   updateHostTextComponent,
 } from './ReactFiberReconciler'
@@ -24,9 +26,11 @@ function beginWork(wip) {
       break
     }
     case FunctionComponent: {
+      updateFunctionComponent(wip)
       break
     }
     case ClassComponent: {
+      updateClassComponent(wip)
       break
     }
     case HostText: {

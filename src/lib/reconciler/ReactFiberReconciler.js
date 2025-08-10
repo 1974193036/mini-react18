@@ -22,3 +22,32 @@ export function updateHostComponent(wip) {
 export function updateHostTextComponent(wip) {
   wip.stateNode = document.createTextNode(wip.props.children)
 }
+
+/**
+ * 更新函数组件
+ * @param {*} wip 需要处理的 fiber 对象节点
+ */
+export function updateFunctionComponent(wip) {
+  const { type, props } = wip
+  // 这里从当前的 wip 上面获取到的 type 是一个函数
+  // 那么我们就直接执行这个函数，获取到它的返回值
+  const children = type(props)
+  // 有了 vnode 节点之后，就调用 reconcileChildren 方法，来处理子节点
+  reconcileChildren(wip, children)
+}
+
+/**
+ * 更新类组件
+ * @param {*} wip 需要处理的 fiber 对象节点
+ */
+export function updateClassComponent(wip) {
+  const { type, props } = wip
+  // 这里从当前的 wip 上面获取到的 type 是一个类
+  // 那么我们就 new 一个实例出来
+  // eslint-disable-next-line new-cap
+  const instance = new type(props)
+  // 接下来我们就可以调用 render 方法，获取到它的返回值
+  const children = instance.render()
+  // 有了 vnode 节点之后，就调用 reconcileChildren 方法，来处理子节点
+  reconcileChildren(wip, children)
+}

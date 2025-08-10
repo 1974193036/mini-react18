@@ -49,7 +49,7 @@ export function reconcileChildren(returnFiber, children) {
       const newChildVnode = newChildren[i]
 
       // 那么我们这一次就不处理，直接跳到下一次
-      if (newChildVnode === null)
+      if (newChildVnode === null || newChildVnode === false)
         continue
 
       // 下一步就应该根据 vnode 生成新的 fiber
