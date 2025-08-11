@@ -1,5 +1,6 @@
 import { updateNode } from '../shared/utils.js'
 import { reconcileChildren } from './ReactChildFiber.js'
+import { renderWithHooks } from '../react/ReactHook.js'
 
 /**
  *
@@ -28,6 +29,7 @@ export function updateHostTextComponent(wip) {
  * @param {*} wip 需要处理的 fiber 对象节点
  */
 export function updateFunctionComponent(wip) {
+  renderWithHooks(wip)
   const { type, props } = wip
   // 这里从当前的 wip 上面获取到的 type 是一个函数
   // 那么我们就直接执行这个函数，获取到它的返回值

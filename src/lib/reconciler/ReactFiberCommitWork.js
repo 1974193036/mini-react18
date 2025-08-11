@@ -1,3 +1,5 @@
+import { Placement, Update, updateNode } from '../shared/utils'
+
 function getParentDOM(wip) {
   let temp = wip
   while (temp) {
@@ -14,10 +16,54 @@ function getParentDOM(wip) {
 function commitNode(wip) {
   // 1. 首先第一步，我们需要获取该 fiber 所对应的父节点的 DOM 对象
   const parentNodeDOM = getParentDOM(wip.return)
+
   // 2. 进行一个 DOM 操作
-  if (wip.stateNode) {
-    parentNodeDOM.appendChild(wip.stateNode)
+  // 从 fiber 对象上面拿到 flags 和 stateNode
+  const { flags, stateNode } = wip
+
+  // 接下来我们需要根据不同的 flags 做不同的操作
+  if ((flags & Placement) && stateNode) {
+    parentNodeDOM.appendChild(stateNode)
   }
+
+  if ((flags & Update) && stateNode) {
+    // 这里就应该是更新属性的操作了
+    updateNode(stateNode, wip.alternate.props, wip.props)
+  }
+
+  if (wip.deletions) {
+    // 说明有需要删除的节点
+    commitDeletion(wip.deletions, stateNode || parentNodeDOM)
+  }
+}
+
+/**
+ *
+ * @param {*} deletions 当前 fiber 对象上面要删除的子 fiber 数组
+ * @param {*} parentNode 当前 fiber 对象所对应的真实 DOM 对象，如果当前的 fiber 没有 dom 对象，那么传递过来的就是父级的 dom
+ */
+function commitDeletion(deletions, parentNode) {
+  for (let i = 0; i < deletions.length; i++) {
+    // 取出每一个要删除的 fiber 对象
+    const child = deletions[i]
+    // 这里在进行删除的时候，需要删除 fiber 所对应的 stateNode（DOM）
+    // 但是存在一种情况，没有对应的 stateNode（函数组件或者类组件）
+    // 我们就需要往下一直找，直到找到有对应的真实 dom 为止
+    parentNode.removeChild(getStateNode(child))
+  }
+}
+
+/**
+ *
+ * @param {*} fiber 要删除的 fiber
+ * @returns fiber 所对应的真实 DOM 对象
+ */
+function getStateNode(fiber) {
+  let temp = fiber
+  while (!temp.stateNode) {
+    temp = temp.child
+  }
+  return temp.stateNode
 }
 
 function commitWorker(wip) {
