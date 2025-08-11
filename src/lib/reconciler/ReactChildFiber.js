@@ -1,6 +1,12 @@
 import { isArray, isStrOrNum, Update } from '../shared/utils'
 import createFiber from '../reconciler/ReactFiber'
-import { placeChild, sameNode } from './ReactChildFiberAssistant'
+import {
+  deleteChild,
+  deleteRemainingChildren,
+  mapRemainingChildren,
+  placeChild,
+  sameNode,
+} from './ReactChildFiberAssistant'
 
 /**
  * 该方法是用来协调子节点的，这里就会涉及到有名的 diff 算法
@@ -123,6 +129,8 @@ export function reconcileChildren(returnFiber, children) {
   // 2. i === newChildren.length 说明是更新
   if (i === newChildren.length) {
     // 如果还剩余有旧的 fiber 节点，那么就需要将其删除掉
+    deleteRemainingChildren(returnFiber, oldFiber)
+    return
   }
 
   // 3. 接下来就是我们初次渲染的情况
@@ -161,5 +169,62 @@ export function reconcileChildren(returnFiber, children) {
       // 从而将当前 fiber 更新为上一个 fiber
       previousNewFiber = newFiber
     }
+  }
+
+  // 4. 处理新旧节点都还有剩余的情况
+  // 首先我们需要创建一个 map 结构，用于存储剩余的旧节点
+  const existingChildren = mapRemainingChildren(oldFiber)
+  // 去遍历剩余的新节点
+  for (; i < newChildren.length; i++) {
+    // 先拿到当前的 vnode
+    const newChild = newChildren[i]
+    if (newChild === null || newChild === false)
+      continue
+
+    // 根据新节点的 vnode 去生成新的 fiber
+    const newFiber = createFiber(newChild, returnFiber)
+
+    // 接下来就需要去哈希表里面寻找是否有可以复用的节点
+    const matchedFiber = existingChildren.get(newFiber.key || newFiber.index)
+    // 这里就有两种情况：
+    // 有可能从哈希表里面找到了，也有可能没有找到
+    if (matchedFiber) {
+      // 说明找到了，那么我们就可以复用
+      // 复用旧 fiber 上面的部分信息，特别是 DOM 节点
+      Object.assign(newFiber, {
+        stateNode: matchedFiber.stateNode,
+        alternate: matchedFiber,
+        flags: Update,
+      })
+      // 删除哈希表中的旧 fiber
+      existingChildren.delete(newFiber.key || newFiber.index)
+    }
+
+    // 更新 lastPlacedIndex 的值
+    lastPlacedIndex = placeChild(
+      newFiber,
+      lastPlacedIndex,
+      i,
+      shouldTrackSideEffects,
+    )
+
+    // 形成链表
+    if (previousNewFiber === null) {
+      // 说明你是第一个子节点
+      returnFiber.child = newFiber
+    }
+    else {
+      // 进入此分支，说明当前生成的 fiber 节点并非父 fiber 的第一个节点
+      previousNewFiber.sibling = newFiber
+    }
+    // 不要忘了更新 previousNewFiber
+    previousNewFiber = newFiber
+  }
+
+  // 5. 整个新节点遍历完成后，如果 map 中还有剩余的旧节点，这些旧节点也就没有用了，直接删除即可
+  if (shouldTrackSideEffects) {
+    existingChildren.forEach((child) => {
+      deleteChild(returnFiber, child)
+    })
   }
 }
