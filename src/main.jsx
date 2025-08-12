@@ -5,15 +5,31 @@
 import ReactDOM from './lib/react-dom/ReactDOM'
 // import React from './lib/react/React'
 // import FunctionComponent from './FunctionComponentDiff'
-import { useState } from "./lib/react/ReactHook";
+import { useEffect, useState } from './lib/react/ReactHook'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 // eslint-disable-next-line react-refresh/only-export-components
 function FunctionComponent() {
   // 定义一个状态 count，以及修改状态的方法 setCount
-  const [count1, setCount1] = useState(0);
-  const [count2, setCount2] = useState(10);
+  const [count1, setCount1] = useState(0)
+  const [count2, setCount2] = useState(10)
+
+  useEffect(() => {
+    console.log('执行副作用方法1')
+    // 清理函数，会在下一次执行副作用函数之前执行
+    return function () {
+      console.log('执行了清理方法1')
+    }
+  }, [count1])
+
+  useEffect(() => {
+    console.log('执行副作用方法2')
+    // 清理函数，会在下一次执行副作用函数之前执行
+    return function () {
+      console.log('执行了清理方法2')
+    }
+  }, [count2])
 
   function handleClick() {
     console.log('点击了')

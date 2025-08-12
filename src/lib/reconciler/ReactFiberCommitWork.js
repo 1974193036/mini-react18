@@ -1,4 +1,6 @@
 import { Placement, Update, updateNode } from '../shared/utils'
+import { FunctionComponent } from './ReactWorkTags'
+import { invokeHooks } from './ReactChildFiberAssistant'
 
 function getParentDOM(wip) {
   let temp = wip
@@ -34,6 +36,12 @@ function commitNode(wip) {
   if (wip.deletions) {
     // 说明有需要删除的节点
     commitDeletion(wip.deletions, stateNode || parentNodeDOM)
+  }
+
+  if (wip.tag === FunctionComponent) {
+    // 进入此 if，说明当前的 fiber 对象的类型为函数类型
+    // 那么我们处理一下 hook
+    invokeHooks(wip)
   }
 }
 

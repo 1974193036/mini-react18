@@ -3,6 +3,8 @@
  */
 
 import { Placement } from '../shared/utils'
+import { scheduleCallback } from '../scheduler/Scheduler'
+import { NormalPriority } from '../scheduler/SchedulerPriorities'
 
 /**
  * 判断是否为相同
@@ -117,4 +119,28 @@ export function mapRemainingChildren(currentFirstChild) {
   }
 
   return existingChildren
+}
+
+/**
+ * 取出该 fiber 对象中的 updateQueue 里面的副作用函数，依次执行
+ * @param {*} wip
+ */
+export function invokeHooks(wip) {
+  const { updateQueue } = wip
+
+  for (let i = 0; i < updateQueue.length; i++) {
+    // 取出每一个副作用对象
+    const effect = updateQueue[i]
+
+    // 检查是否有清除方法，有的话就先执行清除方法
+    if (effect.destroy) {
+      effect.destroy()
+    }
+
+    // 接下来就应该执行副作用函数了
+    // 注意这里并非直接执行，而是创建一个任务，放入到任务队列中
+    scheduleCallback(NormalPriority, () => {
+      effect.destroy = effect.create()
+    })
+  }
 }
