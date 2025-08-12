@@ -5,19 +5,32 @@
 import ReactDOM from './lib/react-dom/ReactDOM'
 // import React from './lib/react/React'
 // import FunctionComponent from './FunctionComponentDiff'
+import { useState } from "./lib/react/ReactHook";
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 // eslint-disable-next-line react-refresh/only-export-components
 function FunctionComponent() {
+  // 定义一个状态 count，以及修改状态的方法 setCount
+  const [count1, setCount1] = useState(0);
+  const [count2, setCount2] = useState(10);
+
   function handleClick() {
     console.log('点击了')
+    setCount1(count1 + 1)
+  }
+
+  function handleClick2() {
+    console.log('点击了')
+    setCount2(count2 + 1)
   }
 
   return (
     <div className="comp">
-      <h1>0</h1>
+      <h1>{count1}</h1>
+      <h3>{count2}</h3>
       <button onClick={handleClick}>点击</button>
+      <button onClick={handleClick2}>点击2</button>
     </div>
   )
 }
