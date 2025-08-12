@@ -1,5 +1,6 @@
 import createFiber from '../reconciler/ReactFiber'
 import scheduleUpdateOnFiber from '../reconciler/ReactFiberWorkLoop'
+import { initEvent } from './SyntheticEvent'
 /**
  * 更新容器的方法
  * @param {*} element 要挂载的 vnode 树
@@ -31,6 +32,7 @@ class ReactDOMRoot {
    * 2. 新的虚拟DOM，我们称之为 Fiber
    */
   render(children) {
+    initEvent(this._internalRoot, 'click')
     updateContainer(children, this._internalRoot)
   }
 }

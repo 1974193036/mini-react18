@@ -64,17 +64,17 @@ export function updateNode(node, prevVal, nextVal) {
     }
     else if (k.startsWith('on')) {
       // 说明是绑定的事件
-      // 那么我就需要将你这个旧值移除掉
+      // // 那么我就需要将你这个旧值移除掉
 
-      // 首先获取到事件名
-      let eventName = k.slice(2).toLowerCase()
-      // 需要注意，如果是 change 事件，那么背后绑定的是 input 事件
-      // 这里我们需要做一下处理
-      if (eventName === 'change') {
-        eventName = 'input'
-      }
-      // 移除事件
-      node.removeEventListener(eventName, prevVal[k])
+      // // 首先获取到事件名
+      // let eventName = k.slice(2).toLowerCase()
+      // // 需要注意，如果是 change 事件，那么背后绑定的是 input 事件
+      // // 这里我们需要做一下处理
+      // if (eventName === 'change') {
+      //   eventName = 'input'
+      // }
+      // // 移除事件
+      // node.removeEventListener(eventName, prevVal[k])
     }
     else {
       // 进入此分支，说明就是普通的属性
@@ -102,14 +102,14 @@ export function updateNode(node, prevVal, nextVal) {
       }
     }
     else if (k.startsWith('on')) {
-      // 说明是绑定事件
-      let eventName = k.slice(2).toLowerCase()
+      // // 说明是绑定事件
+      // let eventName = k.slice(2).toLowerCase()
 
-      if (eventName === 'change') {
-        eventName = 'input'
-      }
+      // if (eventName === 'change') {
+      //   eventName = 'input'
+      // }
 
-      node.addEventListener(eventName, nextVal[k])
+      // node.addEventListener(eventName, nextVal[k])
     }
     else {
       // 进入此分支，说明是普通的属性

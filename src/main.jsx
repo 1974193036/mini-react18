@@ -36,9 +36,10 @@ function FunctionComponent() {
     setCount1(count1 + 1)
   }
 
-  function handleClick2() {
+  function handleClick2(e) {
     console.log('点击了')
     setCount2(count2 + 1)
+    e.stopPropagation()
   }
 
   return (
@@ -51,8 +52,12 @@ function FunctionComponent() {
   )
 }
 
+function handleClickParent() {
+  console.log('点击了 - parent')
+}
+
 root.render(
-  <div id="oDiv" className="test">
+  <div id="oDiv" className="test" onClick={handleClickParent}>
     <p>React</p>
     <a href="https://www.baidu.com">baidu</a>
     <FunctionComponent />
